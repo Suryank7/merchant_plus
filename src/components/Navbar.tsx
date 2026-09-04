@@ -41,31 +41,43 @@ export function Navbar({
         <div className="hidden lg:flex items-center gap-1.5 p-1.5 rounded-full bg-[#0d0e12]/85 border border-white/10 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]">
           <button
             onClick={() => onScrollToSection('cockpit')}
-            className="px-4 py-1.5 text-[13.5px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
           >
-            Audit Cockpit
+            Cockpit
           </button>
           <button
             onClick={() => onScrollToSection('how-it-works')}
-            className="px-4 py-1.5 text-[13.5px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
           >
-            5-Node Pipeline
+            Pipeline
           </button>
           <button
             onClick={() => onScrollToSection('pillars')}
-            className="px-4 py-1.5 text-[13.5px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
           >
             XAI Pillars
           </button>
           <button
+            onClick={() => onScrollToSection('projects')}
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+          >
+            Case Studies
+          </button>
+          <button
             onClick={() => onScrollToSection('interventions')}
-            className="px-4 py-1.5 text-[13.5px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
           >
             Action Plan
           </button>
           <button
+            onClick={() => onScrollToSection('faq')}
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+          >
+            FAQ
+          </button>
+          <button
             onClick={() => onScrollToSection('provenance')}
-            className="px-4 py-1.5 text-[13.5px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
+            className="px-3.5 py-1.5 text-[13px] font-medium transition-all rounded-full text-white/70 hover:text-white hover:bg-white/[0.06]"
           >
             7 Repos
           </button>

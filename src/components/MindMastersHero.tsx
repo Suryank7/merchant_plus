@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, TrendingUp, RefreshCw, Layers } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, RefreshCw } from 'lucide-react';
 import { MERCHANT_PRESETS } from '@/lib/mock-data';
 
 interface MindMastersHeroProps {
@@ -21,129 +21,158 @@ export function MindMastersHero({
 }: MindMastersHeroProps) {
   const currentIndex = MERCHANT_PRESETS.findIndex((p) => p.id === selectedPresetId);
   const activePreset = MERCHANT_PRESETS[currentIndex] || MERCHANT_PRESETS[0];
+  const [progress, setProgress] = useState(0);
+
+  // Auto-progress slide carousel every 6s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          const nextIndex = (currentIndex + 1) % MERCHANT_PRESETS.length;
+          onSelectPreset(MERCHANT_PRESETS[nextIndex].id);
+          return 0;
+        }
+        return prev + 2;
+      });
+    }, 120);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, onSelectPreset]);
+
+  // Reset progress on preset change
+  useEffect(() => {
+    setProgress(0);
+  }, [selectedPresetId]);
 
   return (
-    <section className="relative overflow-hidden min-h-[92svh] flex items-center justify-center pt-28 pb-20 sm:pt-36 sm:pb-24">
-      {/* Background Animated Floating Capsules matching MindMasters AI */}
+    <section className="relative overflow-hidden min-h-[100svh] flex items-center justify-center pt-24 sm:pt-28 pb-24 sm:pb-28">
+      {/* Background Animated Floating Capsules matching MindMasters AI exactly */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-[#0a0a0f]">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.06] via-transparent to-cyan-500/[0.06] blur-3xl" />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
 
-        {/* Capsule 1: Top Left */}
-        <div
-          className="absolute left-[-10%] md:left-[-4%] top-[12%] md:top-[18%] opacity-60"
-          style={{ transform: 'rotate(-4deg)' }}
-        >
-          <div className="relative w-[520px] h-[120px] rounded-full bg-gradient-to-r from-indigo-500/[0.18] to-transparent backdrop-blur-[2px] border-2 border-white/[0.12] shadow-[0_8px_32px_0_rgba(255,255,255,0.06)]" />
+          {/* Capsule 1: Top Left */}
+          <div className="absolute left-[-10%] md:left-[-5%] top-[15%] md:top-[20%] animate-float-1">
+            <div className="relative w-[600px] h-[140px]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-indigo-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+            </div>
+          </div>
+
+          {/* Capsule 2: Bottom Right */}
+          <div className="absolute right-[-5%] md:right-[0%] top-[70%] md:top-[75%] animate-float-2">
+            <div className="relative w-[500px] h-[120px]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-rose-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+            </div>
+          </div>
+
+          {/* Capsule 3: Bottom Left */}
+          <div className="absolute left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%] animate-float-3">
+            <div className="relative w-[300px] h-[80px]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-violet-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+            </div>
+          </div>
+
+          {/* Capsule 4: Top Right */}
+          <div className="absolute right-[15%] md:right-[20%] top-[10%] md:top-[15%] animate-float-4">
+            <div className="relative w-[200px] h-[60px]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-amber-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+            </div>
+          </div>
+
+          {/* Capsule 5: Small Cyan */}
+          <div className="absolute left-[20%] md:left-[25%] top-[5%] md:top-[10%] animate-float-5">
+            <div className="relative w-[150px] h-[40px]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-cyan-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+            </div>
+          </div>
         </div>
 
-        {/* Capsule 2: Bottom Right */}
-        <div
-          className="absolute right-[-6%] md:right-[0%] top-[65%] md:top-[68%] opacity-50"
-          style={{ transform: 'rotate(-28deg)' }}
-        >
-          <div className="relative w-[480px] h-[110px] rounded-full bg-gradient-to-r from-cyan-500/[0.16] to-transparent backdrop-blur-[2px] border-2 border-white/[0.12] shadow-[0_8px_32px_0_rgba(255,255,255,0.06)]" />
-        </div>
-
-        {/* Capsule 3: Bottom Left */}
-        <div
-          className="absolute left-[8%] bottom-[8%] opacity-40"
-          style={{ transform: 'rotate(-22deg)' }}
-        >
-          <div className="relative w-[280px] h-[75px] rounded-full bg-gradient-to-r from-violet-500/[0.16] to-transparent backdrop-blur-[2px] border-2 border-white/[0.12] shadow-[0_8px_32px_0_rgba(255,255,255,0.06)]" />
-        </div>
-
-        {/* Capsule 4: Top Right */}
-        <div
-          className="absolute right-[12%] top-[8%] opacity-45"
-          style={{ transform: 'rotate(6deg)' }}
-        >
-          <div className="relative w-[220px] h-[60px] rounded-full bg-gradient-to-r from-emerald-500/[0.14] to-transparent backdrop-blur-[2px] border-2 border-white/[0.12]" />
-        </div>
-
-        {/* Dark radial fade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06070b] via-transparent to-[#06070b]/80" />
+        {/* Ambient Dark fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-[#0a0a0f]/80" />
       </div>
 
-      {/* Main Hero Container */}
+      {/* Main Content matching MindMasters layout */}
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center flex flex-col items-center">
-        {/* Top Tag Pill matching MindMasters "Reason 01" / "AI Engineering" */}
-        <div className="flex items-center gap-3 sm:gap-4 mb-7 sm:mb-9">
+        {/* Top Tag Pill */}
+        <div className="flex items-center gap-3 sm:gap-4 mb-7 sm:mb-10">
           <span className="inline-flex items-center gap-2 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.18em] text-white/70">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#74f5ff] relative">
-              <span className="absolute -inset-1 rounded-full bg-[#74f5ff] animate-ping opacity-75" />
-            </span>
-            Track 01
+            <span className="h-1.5 w-1.5 rounded-full bg-[#74f5ff]" />
+            Reason 0{currentIndex + 1}
           </span>
           <span className="hidden sm:block h-px w-10 bg-white/15" />
-          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md px-3.5 py-1 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-white/85 shadow-[0_1px_0_rgba(255,255,255,0.08)_inset]">
-            Razorpay AI Growth &amp; Agentic Commerce
+          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md px-3.5 py-1.5 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-white/80 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_8px_24px_-12px_rgba(0,0,0,0.6)]">
+            {activePreset.business_type.replace(/_/g, ' ').toUpperCase()}
           </span>
         </div>
 
-        {/* Main Section Heading */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08] text-balance">
-          <span className="block">Autonomous AI Copilot</span>
-          <span className="block mt-1">
-            For <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#74f5ff] via-[#5b8cff] to-[#a78bfa]">Payment Health</span> &amp; Growth
-          </span>
+        {/* Big Bold Headline matching MindMasters */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-[-0.03em] text-white text-balance leading-[1.1] sm:leading-[1.12]">
+          <span className="block">We Build AI Systems That</span>
+          <span className="block text-white/90">Protect &amp; Scale Merchant Revenue</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-6 max-w-2xl text-[15px] sm:text-[17px] md:text-[18px] text-white/65 leading-relaxed text-pretty">
-          Automates multi-hour manual merchant audits into sub-30-second continuous agentic audits.
-          Detects fraud anomalies, recovers checkout drop-offs, and enforces RBI zero-MDR UPI arbitrage.
+        <p className="mt-5 sm:mt-7 max-w-2xl text-[14.5px] sm:text-[17px] md:text-[18px] text-white/60 leading-[1.55] sm:leading-[1.6] text-pretty">
+          From payment health audits and fraud anomaly scoring to autonomous zero-MDR UPI routing, we deploy production-ready agentic intelligence for Razorpay merchants.
         </p>
 
-        {/* Action Buttons */}
-        <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3.5">
-          <button
-            onClick={onRunAudit}
-            disabled={isRunning}
-            className="group relative inline-flex items-center gap-2.5 rounded-full bg-[#12141c] text-white text-[14px] sm:text-[15px] font-medium px-7 py-3.5 ring-1 ring-white/15 shadow-[0_1px_0_rgba(255,255,255,0.12)_inset,0_12px_30px_-12px_rgba(0,0,0,0.9)] hover:ring-white/30 hover:bg-[#1a1c24] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer disabled:opacity-50"
-          >
-            <RefreshCw className={`h-4 w-4 text-[#74f5ff] ${isRunning ? 'animate-spin' : ''}`} />
-            <span className="relative">{isRunning ? 'Running 5-Node Agent...' : 'Run Continuous Audit'}</span>
-            <ArrowRight className="h-4 w-4 text-white/80 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
+        {/* Primary CTA Button matching MindMasters */}
+        <div className="mt-7 sm:mt-10 flex flex-col items-center gap-3.5">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={onRunAudit}
+              disabled={isRunning}
+              className="group relative inline-flex items-center gap-2 rounded-full bg-[#12141c] text-white text-[14px] sm:text-[15px] font-medium px-6 sm:px-7 py-3 sm:py-3.5 ring-1 ring-white/10 shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_12px_30px_-12px_rgba(0,0,0,0.9)] hover:ring-white/25 hover:bg-[#1a1c24] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer disabled:opacity-50"
+            >
+              <RefreshCw className={`relative h-4 w-4 text-[#74f5ff] ${isRunning ? 'animate-spin' : ''}`} />
+              <span className="relative">{isRunning ? 'Running 5-Node Agent...' : 'Run Autonomous Audit'}</span>
+              <ArrowRight className="lucide lucide-arrow-right relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 text-white/80" />
+            </button>
 
-          <button
-            onClick={onOpenBrief}
-            className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] text-white/90 text-[14px] sm:text-[15px] font-medium px-6 py-3.5 border border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all cursor-pointer"
-          >
-            <span>Executive Growth Brief</span>
-          </button>
+            <button
+              type="button"
+              onClick={onOpenBrief}
+              className="btn-shiny-pill rounded-full inline-flex items-center gap-2 text-[14px] sm:text-[15px] font-medium px-6 py-3 sm:py-3.5 cursor-pointer"
+            >
+              <span>Executive Brief</span>
+            </button>
+          </div>
+
+          <p className="text-[11px] sm:text-[12.5px] font-mono tracking-wider text-white/40 uppercase text-center mt-1">
+            AI • RISK • ZERO-MDR • CONVERSION • LANGGRAPH
+            <span className="normal-case text-white/50 font-sans tracking-normal ml-1">
+              — Built for Razorpay merchants and growth teams.
+            </span>
+          </p>
         </div>
 
-        {/* Kicker Mono Text */}
-        <p className="text-[11px] sm:text-[12px] font-mono tracking-wider text-white/45 uppercase text-center mt-5">
-          XGBoost (ROC-AUC 0.982) • LangGraph StateGraph • CTGAN Oversampling • Claude 3.5 Sonnet
-          <span className="hidden md:inline normal-case text-white/50 font-sans tracking-normal ml-1">
-            — Synthesizing 7 proven repositories.
-          </span>
-        </p>
-
-        {/* Slide Carousel Indicator matching MindMasters (01 / 04) */}
-        <div className="mt-12 sm:mt-14 flex items-center gap-4">
+        {/* Slide Progress Carousel matching MindMasters (01 / 04) */}
+        <div className="mt-12 sm:mt-16 flex items-center gap-4">
           <div className="flex items-center gap-2">
-            {MERCHANT_PRESETS.map((preset, idx) => {
+            {MERCHANT_PRESETS.map((p, idx) => {
               const isActive = idx === currentIndex;
               return (
                 <button
-                  key={preset.id}
-                  onClick={() => onSelectPreset(preset.id)}
-                  aria-label={`Select ${preset.name}`}
-                  className={`relative h-1.5 transition-all duration-300 rounded-full overflow-hidden ${
-                    isActive ? 'w-10 bg-[#74f5ff]' : 'w-7 bg-white/15 hover:bg-white/30'
-                  }`}
-                />
+                  key={p.id}
+                  type="button"
+                  onClick={() => onSelectPreset(p.id)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  aria-current={isActive}
+                  className="relative h-1 w-8 sm:w-10 overflow-hidden rounded-full bg-white/15 transition-colors hover:bg-white/25 cursor-pointer"
+                >
+                  {isActive && (
+                    <span
+                      className="absolute inset-y-0 left-0 rounded-full bg-[#74f5ff] transition-all duration-100"
+                      style={{ width: `${progress}%` }}
+                    />
+                  )}
+                </button>
               );
             })}
           </div>
-          <span className="text-[12px] sm:text-[13px] font-mono font-medium tabular-nums text-white/55">
+          <span className="text-[12px] sm:text-[13px] font-medium tabular-nums text-white/50 font-mono">
             0{currentIndex + 1} / 0{MERCHANT_PRESETS.length}
-          </span>
-          <span className="text-xs text-white/70 font-medium hidden sm:inline">
-            Active: <span className="text-[#74f5ff]">{activePreset.name}</span>
           </span>
         </div>
       </div>

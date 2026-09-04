@@ -5,6 +5,7 @@
   --background: #06070b;
   --foreground: #ffffff;
   --foreground-dim: rgba(255, 255, 255, 0.65);
+  --foreground-muted: rgba(255, 255, 255, 0.50);
   --brand: #74f5ff;
   --brand-electric: #00f2ff;
   --brand-blue: #5b8cff;
@@ -35,23 +36,19 @@ body {
 }
 
 /* Glass & Glow utilities from MindMasters AI */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .glass-pill {
   background: rgba(13, 14, 18, 0.85);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-.glass-card {
-  background: #0b0c12;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.7);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card:hover {
-  border-color: rgba(116, 245, 255, 0.35);
-  box-shadow: 0 0 30px rgba(0, 242, 255, 0.08), 0 12px 36px -10px rgba(0, 0, 0, 0.7);
 }
 
 .card-premium {
@@ -60,33 +57,63 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
-/* Floating Glass Capsule effect from MindMasters AI */
-.floating-capsule {
-  border-radius: 9999px;
-  background: linear-gradient(90deg, rgba(91, 140, 255, 0.15) 0%, transparent 100%);
-  backdrop-filter: blur(2px);
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.08);
+/* Floating Glass Capsule keyframe float animations */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--rot, 0deg));
+  }
+  50% {
+    transform: translateY(-12px) rotate(var(--rot, 0deg));
+  }
 }
 
-.glow-ambient {
-  background: radial-gradient(closest-side, rgba(91, 140, 255, 0.18) 0%, rgba(167, 139, 250, 0.08) 35%, transparent 70%);
-  filter: blur(40px);
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--rot, 0deg));
+  }
+  50% {
+    transform: translateY(14px) rotate(var(--rot, 0deg));
+  }
 }
 
-/* Button with MindMasters glossy gradient */
+.animate-float-1 {
+  --rot: -3deg;
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  --rot: -30deg;
+  animation: float-reverse 9s ease-in-out infinite;
+}
+
+.animate-float-3 {
+  --rot: -23deg;
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-4 {
+  --rot: 5deg;
+  animation: float-reverse 10s ease-in-out infinite;
+}
+
+.animate-float-5 {
+  --rot: -40deg;
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+/* Buttons from MindMasters AI */
 .btn-shiny-pill {
   background: linear-gradient(180deg, #1c1d24 0%, #14151b 50%, #0c0d10 100%);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-shiny-pill:hover {
   border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1.5px);
 }
 
 .btn-electric-pill {
@@ -99,17 +126,31 @@ body {
 
 .btn-electric-pill:hover {
   box-shadow: 0 6px 30px rgba(116, 245, 255, 0.5);
-  transform: translateY(-1px);
+  transform: translateY(-1.5px);
   opacity: 0.95;
 }
 
-/* Pulse keyframes */
-@keyframes ping-slow {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(2); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
+/* Mobile Dock Glass */
+.dock-glass {
+  background: rgba(13, 14, 18, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
 }
 
-.animate-ping-slow {
-  animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+/* Glow pulse animation for whatsapp / FAB */
+@keyframes glow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
 }

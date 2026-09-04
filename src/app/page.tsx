@@ -6,6 +6,10 @@ import { MindMastersHero } from '@/components/MindMastersHero';
 import { MindMastersCockpit } from '@/components/MindMastersCockpit';
 import { MindMastersProcess } from '@/components/MindMastersProcess';
 import { MindMastersServices } from '@/components/MindMastersServices';
+import { MindMastersProjects } from '@/components/MindMastersProjects';
+import { MindMastersDiscuss } from '@/components/MindMastersDiscuss';
+import { MindMastersFAQ } from '@/components/MindMastersFAQ';
+import { MindMastersFAB } from '@/components/MindMastersFAB';
 import { AgentPipelineViewer } from '@/components/AgentPipelineViewer';
 import { ActionPlanTable } from '@/components/ActionPlanTable';
 import { RiskFlagsDrawer } from '@/components/RiskFlagsDrawer';
@@ -14,7 +18,7 @@ import { ProvenanceBanner } from '@/components/ProvenanceBanner';
 import { MERCHANT_PRESETS, getPresetTransactions } from '@/lib/mock-data';
 import { auditMerchant, generateDeterministicGrowthBrief } from '@/lib/audit-engine';
 import { AgentTraceStep, GrowthBrief, MerchantScoreResponse } from '@/lib/types';
-import { ArrowRight, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 export default function Home() {
   const [selectedPresetId, setSelectedPresetId] = useState<string>('bombay-threads');
@@ -61,42 +65,52 @@ export default function Home() {
       status: 'completed',
       timestamp: '2026-09-05T01:30:00.000Z',
       duration_ms: 180,
-      summary: `Analyzed checkout conversion (${scoreData.transaction_summary.success_rate}%). Card fee leakage detected.`,
-      details: { success_rate: scoreData.transaction_summary.success_rate },
+      summary: `Analyzed success rates (${scoreData.transaction_summary.success_rate}%) and settlement latency.`,
+      details: {
+        success_rate: scoreData.transaction_summary.success_rate,
+        total_volume: scoreData.transaction_summary.total_volume,
+      },
     },
     {
-      node: 'growth_recommender',
-      title: 'Node 4: Agentic Growth Recommender',
+      node: 'action_planner',
+      title: 'Node 4: ROI Action Recommender',
       status: 'completed',
       timestamp: '2026-09-05T01:30:00.000Z',
       duration_ms: 310,
-      summary: 'Autonomous prioritization matrix ranked top payment health interventions by ROI.',
-      details: { actions_count: scoreData.recommended_actions.length },
+      summary: `Ranked ${scoreData.recommended_actions.length} interventions by expected monthly financial recovery.`,
+      details: {
+        actions_count: scoreData.recommended_actions.length,
+        total_potential_recovery: scoreData.recommended_actions.reduce(
+          (acc, a) => acc + a.estimated_monthly_recovery,
+          0
+        ),
+      },
     },
     {
-      node: 'narrative_generator',
-      title: 'Node 5: Growth Brief Narrative Synthesizer',
+      node: 'brief_generator',
+      title: 'Node 5: Growth Brief & Razorpay Presets',
       status: 'completed',
       timestamp: '2026-09-05T01:30:00.000Z',
-      duration_ms: 450,
-      summary: 'Compiled executive brief for Merchant Success and Leadership review.',
-      details: { engine: 'deterministic_engine' },
+      duration_ms: 150,
+      summary: 'Synthesized executive growth brief with immediate Razorpay webhook & SDK configurations.',
+      details: { status: 'ready_to_deploy' },
     },
   ]);
 
-  // When preset changes, recalculate
+  // Handler for preset selection
   const handleSelectPreset = (presetId: string) => {
     setSelectedPresetId(presetId);
     const preset = MERCHANT_PRESETS.find((p) => p.id === presetId) || MERCHANT_PRESETS[0];
     const txs = getPresetTransactions(presetId);
     const newScore = auditMerchant(txs, preset.business_type);
     setScoreData(newScore);
-    const newBrief = generateDeterministicGrowthBrief(preset.name, preset.business_type, newScore);
-    setGrowthBrief(newBrief);
+    setGrowthBrief(generateDeterministicGrowthBrief(preset.name, preset.business_type, newScore));
 
+    // Update traces
     setTraces((prev) =>
       prev.map((t, i) => ({
         ...t,
+        timestamp: new Date().toISOString(),
         summary:
           i === 0
             ? `Ingested ${preset.transactions_count} transactions for ${preset.name}.`
@@ -182,6 +196,16 @@ export default function Home() {
       {/* 4 Explainable AI Pillars */}
       <MindMastersServices breakdown={scoreData.breakdown} />
 
+      {/* Audited Case Studies Grid */}
+      <MindMastersProjects
+        selectedPresetId={selectedPresetId}
+        onSelectPreset={handleSelectPreset}
+        onScrollToCockpit={() => scrollToSection('cockpit')}
+      />
+
+      {/* Ranked Interventions & Simulated Fixes */}
+      <ActionPlanTable actions={scoreData.recommended_actions} />
+
       {/* Live Agent Telemetry Inspector */}
       <section className="py-12 bg-[#06070b]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -189,11 +213,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ranked Interventions & Simulated Fixes */}
-      <ActionPlanTable actions={scoreData.recommended_actions} />
-
       {/* Risk & Anomaly Ledger */}
       <RiskFlagsDrawer riskFlags={scoreData.risk_flags} />
+
+      {/* Need to discuss callout */}
+      <MindMastersDiscuss
+        onRunAudit={handleRunAudit}
+        onOpenBrief={() => setIsBriefModalOpen(true)}
+      />
+
+      {/* Interactive FAQ Accordion */}
+      <MindMastersFAQ />
 
       {/* Provenance: 7 Cloned Repositories */}
       <ProvenanceBanner />
@@ -204,6 +234,13 @@ export default function Home() {
         onClose={() => setIsBriefModalOpen(false)}
         brief={growthBrief}
         merchantName={activePreset.name}
+      />
+
+      {/* Floating Action Button (Brief & Scroll to top) */}
+      <MindMastersFAB
+        onOpenBrief={() => setIsBriefModalOpen(true)}
+        onScrollToTop={() => scrollToSection('top')}
+        isRunning={isRunning}
       />
 
       {/* MindMasters AI Style Footer */}
