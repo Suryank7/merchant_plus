@@ -1,27 +1,3 @@
 {
-    "services": {
-        "frontend": {
-            "root": ".",
-            "framework": "nextjs"
-        },
-        "risk-engine": {
-            "root": "services/risk-engine"
-        }
-    },
-    "rewrites": [
-        {
-            "source": "/api/risk-engine(/.*)?",
-            "destination": {
-                "type": "service",
-                "service": "risk-engine"
-            }
-        },
-        {
-            "source": "/(.*)",
-            "destination": {
-                "type": "service",
-                "service": "frontend"
-            }
-        }
-    ]
+  "framework": "nextjs"
 }
