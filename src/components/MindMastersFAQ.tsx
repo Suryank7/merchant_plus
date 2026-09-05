@@ -39,7 +39,7 @@ export function MindMastersFAQ() {
   };
 
   return (
-    <section id="faq" className="py-24 relative bg-[#06070b] border-t border-white/[0.06]">
+    <section id="faq" className="py-24 relative bg-transparent border-t border-white/[0.06]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">

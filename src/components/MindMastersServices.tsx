@@ -88,7 +88,7 @@ export function MindMastersServices({ breakdown }: MindMastersServicesProps) {
   ];
 
   return (
-    <section id="pillars" className="relative py-24 sm:py-32 bg-[#06070b] overflow-hidden">
+    <section id="pillars" className="relative py-24 sm:py-32 bg-transparent overflow-hidden">
       {/* Background ambient glows matching MindMasters AI */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div
@@ -123,7 +123,7 @@ export function MindMastersServices({ breakdown }: MindMastersServicesProps) {
         </div>
 
         {/* Services / Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {pillars.map((pillar) => {
             const Icon = pillar.icon;
             const isExpanded = activeExplainId === pillar.id;
@@ -131,7 +131,7 @@ export function MindMastersServices({ breakdown }: MindMastersServicesProps) {
             return (
               <div
                 key={pillar.id}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0b0c12] p-5 sm:p-6 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-[#74f5ff]/35 hover:shadow-[0_0_30px_rgba(0,242,255,0.08)]"
+                className="glass-card-interactive group relative overflow-hidden rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between"
               >
                 <div>
                   {/* Card Top */}

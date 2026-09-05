@@ -36,17 +36,17 @@ export function RiskFlagsDrawer({ riskFlags }: RiskFlagsDrawerProps) {
   };
 
   return (
-    <section className="py-12 bg-[#06070b]">
+    <section className="py-16 sm:py-24 bg-transparent relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-white/10 bg-[#0a0c12] p-6 sm:p-10 shadow-2xl">
+        <div className="rounded-3xl border border-white/15 backdrop-blur-2xl bg-gradient-to-b from-white/[0.04] via-white/[0.015] to-[#06070b]/90 p-6 sm:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/[0.08]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-white/[0.08]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full glass-pill px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-amber-400 mb-2">
                 <ShieldAlert className="w-3.5 h-3.5" />
                 <span>Risk &amp; Anomaly Ledger</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
                 Statistical Anomaly Radar
               </h2>
               <p className="text-xs sm:text-sm text-white/60 mt-1">
@@ -56,41 +56,41 @@ export function RiskFlagsDrawer({ riskFlags }: RiskFlagsDrawerProps) {
 
             {/* Filter controls */}
             <div className="flex items-center gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:w-60">
-                <Search className="w-4 h-4 text-white/40 absolute left-3 top-2.5" />
+              <div className="relative flex-1 sm:w-64">
+                <Search className="w-4 h-4 text-white/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search ID or anomaly..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-[#0e1017] border border-white/10 rounded-full pl-9 pr-4 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#74f5ff]/40"
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-full pl-10 pr-4 py-2.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#74f5ff]/40"
                 />
               </div>
 
               <select
                 value={filterSeverity}
                 onChange={(e) => setFilterSeverity(e.target.value)}
-                className="bg-[#0e1017] border border-white/10 rounded-full px-4 py-2 text-xs text-white/80 focus:outline-none focus:border-[#74f5ff]/40 cursor-pointer"
+                className="bg-white/[0.04] border border-white/10 rounded-full px-4 py-2.5 text-xs text-white/80 focus:outline-none focus:border-[#74f5ff]/40 cursor-pointer"
               >
-                <option value="all">All Severity</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
+                <option value="all" className="bg-[#0b0f19]">All Severity</option>
+                <option value="high" className="bg-[#0b0f19]">High</option>
+                <option value="medium" className="bg-[#0b0f19]">Medium</option>
+                <option value="low" className="bg-[#0b0f19]">Low</option>
               </select>
             </div>
           </div>
 
           {/* List */}
           {filtered.length === 0 ? (
-            <div className="py-10 text-center text-white/40 text-xs font-mono">
+            <div className="py-12 text-center text-white/40 text-xs font-mono">
               No anomalous transactions matching active filter.
             </div>
           ) : (
-            <div className="space-y-3 max-h-[380px] overflow-y-auto pr-2">
+            <div className="space-y-3.5 max-h-[440px] overflow-y-auto no-scrollbar pr-1">
               {filtered.map((flag) => (
                 <div
                   key={flag.transaction_id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-[#0e1017] border border-white/[0.06] hover:border-white/15 transition"
+                  className="glass-card-interactive flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl"
                 >
                   <div className="flex items-start gap-3.5">
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border shrink-0 ${getSeverityBadge(flag.severity)}`}>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { MindMastersHero } from '@/components/MindMastersHero';
 import { MindMastersCockpit } from '@/components/MindMastersCockpit';
@@ -15,6 +15,11 @@ import { ActionPlanTable } from '@/components/ActionPlanTable';
 import { RiskFlagsDrawer } from '@/components/RiskFlagsDrawer';
 import { GrowthBriefModal } from '@/components/GrowthBriefModal';
 import { ProvenanceBanner } from '@/components/ProvenanceBanner';
+import { AgenticStoreModal } from '@/components/commerce/AgenticStoreModal';
+import { MerchantCopilotTerminal } from '@/components/copilot/MerchantCopilotTerminal';
+import { AbandonedCartSection } from '@/components/growth/AbandonedCartSection';
+import { PaymentSentinelModal } from '@/components/sentinel/PaymentSentinelModal';
+import { BuildathonTrackFlowBanner } from '@/components/buildathon/BuildathonTrackFlowBanner';
 import { MERCHANT_PRESETS, getPresetTransactions } from '@/lib/mock-data';
 import { auditMerchant, generateDeterministicGrowthBrief } from '@/lib/audit-engine';
 import { AgentTraceStep, GrowthBrief, MerchantScoreResponse } from '@/lib/types';
@@ -24,6 +29,8 @@ export default function Home() {
   const [selectedPresetId, setSelectedPresetId] = useState<string>('bombay-threads');
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isBriefModalOpen, setIsBriefModalOpen] = useState<boolean>(false);
+  const [isStoreModalOpen, setIsStoreModalOpen] = useState<boolean>(false);
+  const [isSentinelModalOpen, setIsSentinelModalOpen] = useState<boolean>(false);
 
   const activePreset =
     MERCHANT_PRESETS.find((p) => p.id === selectedPresetId) || MERCHANT_PRESETS[0];
@@ -98,7 +105,7 @@ export default function Home() {
   ]);
 
   // Handler for preset selection
-  const handleSelectPreset = (presetId: string) => {
+  const handleSelectPreset = useCallback((presetId: string) => {
     setSelectedPresetId(presetId);
     const preset = MERCHANT_PRESETS.find((p) => p.id === presetId) || MERCHANT_PRESETS[0];
     const txs = getPresetTransactions(presetId);
@@ -125,7 +132,7 @@ export default function Home() {
             : 'Growth brief updated with fresh recommendations.',
       }))
     );
-  };
+  }, []);
 
   // Run audit through API route
   const handleRunAudit = async () => {
@@ -162,14 +169,19 @@ export default function Home() {
   };
 
   return (
-    <div id="top" className="min-h-screen bg-[#06070b] text-white selection:bg-[#74f5ff] selection:text-black font-sans antialiased">
-      {/* MindMasters AI Header */}
+    <div id="top" className="min-h-screen bg-[#06070b] text-white selection:bg-[#74f5ff] selection:text-black font-sans antialiased relative overflow-hidden">
+      {/* Razorpay Buildathon 2026 Cyber Grid & Laser Mesh Background */}
+      <div className="razorpay-cyber-mesh" aria-hidden="true" />
+      <div className="relative z-10">
+        {/* MindMasters AI Header */}
       <Navbar
         selectedPresetId={selectedPresetId}
         onSelectPreset={handleSelectPreset}
         onRunAudit={handleRunAudit}
         isRunning={isRunning}
         onScrollToSection={scrollToSection}
+        onOpenStore={() => setIsStoreModalOpen(true)}
+        onOpenSentinel={() => setIsSentinelModalOpen(true)}
       />
 
       {/* Hero Section with Floating Glass Capsules */}
@@ -179,7 +191,12 @@ export default function Home() {
         onRunAudit={handleRunAudit}
         onOpenBrief={() => setIsBriefModalOpen(true)}
         isRunning={isRunning}
+        onOpenStore={() => setIsStoreModalOpen(true)}
+        onScrollToSection={scrollToSection}
       />
+
+      {/* Razorpay AI Buildathon Track 01 Architecture Banner */}
+      <BuildathonTrackFlowBanner />
 
       {/* Cockpit & Radial Score Gauge */}
       <MindMastersCockpit
@@ -189,6 +206,9 @@ export default function Home() {
         onRunAudit={handleRunAudit}
         isRunning={isRunning}
       />
+
+      {/* Interactive AI Root-Cause Copilot Terminal */}
+      <MerchantCopilotTerminal />
 
       {/* 5-Node Agentic Process Timeline */}
       <MindMastersProcess traces={traces} />
@@ -206,8 +226,11 @@ export default function Home() {
       {/* Ranked Interventions & Simulated Fixes */}
       <ActionPlanTable actions={scoreData.recommended_actions} />
 
+      {/* Autonomous Abandoned Cart Win-Back Section */}
+      <AbandonedCartSection />
+
       {/* Live Agent Telemetry Inspector */}
-      <section className="py-12 bg-[#06070b]">
+      <section className="py-12 bg-transparent relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AgentPipelineViewer traces={traces} isRunning={isRunning} />
         </div>
@@ -234,6 +257,18 @@ export default function Home() {
         onClose={() => setIsBriefModalOpen(false)}
         brief={growthBrief}
         merchantName={activePreset.name}
+      />
+
+      {/* Live Autonomous Storefront & Razorpay Checkout Modal */}
+      <AgenticStoreModal
+        isOpen={isStoreModalOpen}
+        onClose={() => setIsStoreModalOpen(false)}
+      />
+
+      {/* Real-Time Payment Sentinel & State Machine Modal */}
+      <PaymentSentinelModal
+        isOpen={isSentinelModalOpen}
+        onClose={() => setIsSentinelModalOpen(false)}
       />
 
       {/* Floating Action Button (Brief & Scroll to top) */}
@@ -269,6 +304,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

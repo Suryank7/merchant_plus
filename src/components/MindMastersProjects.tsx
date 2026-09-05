@@ -39,7 +39,7 @@ export function MindMastersProjects({
   onScrollToCockpit,
 }: MindMastersProjectsProps) {
   return (
-    <section id="projects" className="py-24 relative bg-[#06070b] border-t border-white/[0.06]">
+    <section id="projects" className="py-24 relative bg-transparent border-t border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">

@@ -10,6 +10,8 @@ interface MindMastersHeroProps {
   onRunAudit: () => void;
   onOpenBrief: () => void;
   isRunning: boolean;
+  onOpenStore?: () => void;
+  onScrollToSection?: (id: string) => void;
 }
 
 export function MindMastersHero({
@@ -18,26 +20,33 @@ export function MindMastersHero({
   onRunAudit,
   onOpenBrief,
   isRunning,
+  onOpenStore,
+  onScrollToSection,
 }: MindMastersHeroProps) {
   const currentIndex = MERCHANT_PRESETS.findIndex((p) => p.id === selectedPresetId);
   const activePreset = MERCHANT_PRESETS[currentIndex] || MERCHANT_PRESETS[0];
   const [progress, setProgress] = useState(0);
 
-  // Auto-progress slide carousel every 6s
+  // Auto-progress slide carousel timer
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          const nextIndex = (currentIndex + 1) % MERCHANT_PRESETS.length;
-          onSelectPreset(MERCHANT_PRESETS[nextIndex].id);
-          return 0;
-        }
+        if (prev >= 100) return 100;
         return prev + 2;
       });
     }, 120);
 
     return () => clearInterval(interval);
-  }, [currentIndex, onSelectPreset]);
+  }, []);
+
+  // When progress hits 100%, trigger slide transition cleanly in effect lifecycle
+  useEffect(() => {
+    if (progress >= 100) {
+      const nextIndex = (currentIndex + 1) % MERCHANT_PRESETS.length;
+      onSelectPreset(MERCHANT_PRESETS[nextIndex].id);
+      setProgress(0);
+    }
+  }, [progress, currentIndex, onSelectPreset]);
 
   // Reset progress on preset change
   useEffect(() => {
@@ -46,49 +55,49 @@ export function MindMastersHero({
 
   return (
     <section className="relative overflow-hidden min-h-[100svh] flex items-center justify-center pt-24 sm:pt-28 pb-24 sm:pb-28">
-      {/* Background Animated Floating Capsules matching MindMasters AI exactly */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-[#0a0a0f]">
+      {/* Background Animated Floating Capsules matching MindMasters AI with Razorpay cyber grid show-through */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-transparent">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-transparent to-cyan-500/[0.08] blur-3xl" />
 
           {/* Capsule 1: Top Left */}
           <div className="absolute left-[-10%] md:left-[-5%] top-[15%] md:top-[20%] animate-float-1">
             <div className="relative w-[600px] h-[140px]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-indigo-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-indigo-500/[0.18] backdrop-blur-[4px] border-2 border-white/[0.18] shadow-[0_8px_32px_0_rgba(255,255,255,0.12)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.25),transparent_70%)]" />
             </div>
           </div>
 
           {/* Capsule 2: Bottom Right */}
           <div className="absolute right-[-5%] md:right-[0%] top-[70%] md:top-[75%] animate-float-2">
             <div className="relative w-[500px] h-[120px]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-rose-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-rose-500/[0.18] backdrop-blur-[4px] border-2 border-white/[0.18] shadow-[0_8px_32px_0_rgba(255,255,255,0.12)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.25),transparent_70%)]" />
             </div>
           </div>
 
           {/* Capsule 3: Bottom Left */}
           <div className="absolute left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%] animate-float-3">
             <div className="relative w-[300px] h-[80px]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-violet-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-violet-500/[0.18] backdrop-blur-[4px] border-2 border-white/[0.18] shadow-[0_8px_32px_0_rgba(255,255,255,0.12)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.25),transparent_70%)]" />
             </div>
           </div>
 
           {/* Capsule 4: Top Right */}
           <div className="absolute right-[15%] md:right-[20%] top-[10%] md:top-[15%] animate-float-4">
             <div className="relative w-[200px] h-[60px]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-amber-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-amber-500/[0.18] backdrop-blur-[4px] border-2 border-white/[0.18] shadow-[0_8px_32px_0_rgba(255,255,255,0.12)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.25),transparent_70%)]" />
             </div>
           </div>
 
           {/* Capsule 5: Small Cyan */}
           <div className="absolute left-[20%] md:left-[25%] top-[5%] md:top-[10%] animate-float-5">
             <div className="relative w-[150px] h-[40px]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-cyan-500/[0.15] backdrop-blur-[2px] border-2 border-white/[0.15] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r to-transparent from-cyan-500/[0.18] backdrop-blur-[4px] border-2 border-white/[0.18] shadow-[0_8px_32px_0_rgba(255,255,255,0.12)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.25),transparent_70%)]" />
             </div>
           </div>
         </div>
 
-        {/* Ambient Dark fade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-[#0a0a0f]/80" />
+        {/* Ambient Dark fade blending into next sections */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#06070b] via-transparent to-transparent" />
       </div>
 
       {/* Main Content matching MindMasters layout */}
@@ -137,12 +146,33 @@ export function MindMastersHero({
             >
               <span>Executive Brief</span>
             </button>
+
+            {onOpenStore && (
+              <button
+                type="button"
+                onClick={onOpenStore}
+                className="rounded-full inline-flex items-center gap-2 bg-gradient-to-r from-[#0080ff]/20 to-[#74f5ff]/20 hover:from-[#0080ff]/30 hover:to-[#74f5ff]/30 border border-[#0080ff]/50 text-[14px] sm:text-[15px] font-medium px-6 py-3 sm:py-3.5 text-white cursor-pointer transition-all shadow-[0_4px_20px_rgba(0,128,255,0.25)]"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Agentic Store &amp; Checkout</span>
+              </button>
+            )}
+
+            {onScrollToSection && (
+              <button
+                type="button"
+                onClick={() => onScrollToSection('ai-copilot-terminal')}
+                className="rounded-full inline-flex items-center gap-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-[14px] sm:text-[15px] font-medium px-5 py-3 sm:py-3.5 text-[#74f5ff] cursor-pointer transition-all"
+              >
+                <span>Ask AI Copilot</span>
+              </button>
+            )}
           </div>
 
           <p className="text-[11px] sm:text-[12.5px] font-mono tracking-wider text-white/40 uppercase text-center mt-1">
-            AI • RISK • ZERO-MDR • CONVERSION • LANGGRAPH
+            AGENTIC CHECKOUT • MARGIN-AWARE OFFERS • RAZORPAY MCP • CTGAN FRAUD RISK
             <span className="normal-case text-white/50 font-sans tracking-normal ml-1">
-              — Built for Razorpay merchants and growth teams.
+              — Autonomous Commerce Growth Platform.
             </span>
           </p>
         </div>

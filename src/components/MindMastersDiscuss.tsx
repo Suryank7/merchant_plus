@@ -10,7 +10,7 @@ interface MindMastersDiscussProps {
 
 export function MindMastersDiscuss({ onRunAudit, onOpenBrief }: MindMastersDiscussProps) {
   return (
-    <section id="discuss" className="py-24 relative overflow-hidden bg-[#06070b]">
+    <section id="discuss" className="py-24 relative overflow-hidden bg-transparent">
       {/* Background radial glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-[#74f5ff]/10 via-[#5b8cff]/10 to-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
