@@ -1,6 +1,6 @@
 # MerchantPulse · AI — REST API Documentation
 
-## Next.js API Routes
+## Next.js API Routes (`http://localhost:3000`)
 
 ### 1. Execute Merchant Audit
 **Endpoint**: `POST /api/audit`  
@@ -68,7 +68,20 @@
 {
   "businessName": "ApexScale AI (B2B Cloud SaaS)",
   "businessType": "b2b_saas",
-  "transactions": [...]
+  "transactions": []
+}
+```
+
+---
+
+### 3. Interactive Natural Language Copilot Query
+**Endpoint**: `POST /api/growth/copilot-query`  
+**Description**: Runs an interactive root-cause inquiry on payment failures, isolates gateway latency, and calculates revenue leakage.
+
+#### Request Body
+```json
+{
+  "query": "Why did UPI payments fail during Saturday peak hours?"
 }
 ```
 
@@ -76,35 +89,100 @@
 ```json
 {
   "success": true,
-  "total_duration_ms": 985,
-  "traces": [
-    {
-      "node": "data_harvester",
-      "title": "Node 1: Razorpay Payment Harvester",
-      "status": "completed",
-      "duration_ms": 142,
-      "summary": "Extracted and normalized 180 transactions..."
-    },
-    {
-      "node": "risk_scorer",
-      "title": "Node 2: XGBoost Anomaly & Fraud Scorer",
-      "status": "completed",
-      "duration_ms": 285,
-      "summary": "Evaluated anomaly distribution..."
+  "result": {
+    "query": "Why did UPI payments fail during Saturday peak hours?",
+    "category": "GATEWAY_TIMEOUT",
+    "executiveSummary": "Saturday peak hour volume triggered an HDFC issuer handle spike...",
+    "confidenceScore": 0.94,
+    "leakageInr": 185000,
+    "toolCalls": [
+      {
+        "tool": "fetch_gateway_telemetry",
+        "output": "Isolated 42 HDFC gateway timeouts between 19:00 - 22:00 IST",
+        "executionTimeMs": 42
+      }
+    ],
+    "waterfall": [
+      { "label": "Expected Gross Volume", "deltaInr": 850000, "type": "neutral" },
+      { "label": "HDFC Gateway Latency Drops", "deltaInr": -185000, "type": "negative" }
+    ],
+    "remediation": {
+      "title": "Activate Razorpay Smart Intent & Dynamic Bank Routing",
+      "roiEstMonthlyInr": 185000,
+      "buttonLabel": "Deploy Razorpay Smart Intent"
     }
-  ],
-  "scoreData": { ... },
-  "growthBrief": { ... }
+  }
 }
 ```
 
 ---
 
-## FastAPI Microservice Endpoints (`:8000`)
+### 4. Margin-Aware Dynamic Discounting
+**Endpoint**: `POST /api/growth/smart-discount`  
+**Description**: Computes optimal win-back discount ($D^*$) that preserves unit contribution margin while maximizing conversion probability.
+
+#### Request Body
+```json
+{
+  "productId": "prod_hoodie_01",
+  "userSegment": "at_risk"
+}
+```
+
+---
+
+### 5. Abandoned Cart Win-Back Dispatch
+**Endpoint**: `POST /api/growth/abandoned-cart`  
+**Description**: Generates a secure, time-limited Razorpay Payment Link and dispatches automated win-back SMS/WhatsApp payload.
+
+#### Request Body
+```json
+{
+  "cartId": "cart_01",
+  "customerName": "Rohan Mehta",
+  "customerEmail": "rohan@example.com",
+  "amount": 4999,
+  "discountPct": 10
+}
+```
+
+---
+
+### 6. Create Razorpay Order
+**Endpoint**: `POST /api/razorpay/order`  
+**Description**: Creates an official Razorpay Order object with live payment state tracking.
+
+#### Request Body
+```json
+{
+  "amount": 499900,
+  "currency": "INR",
+  "receipt": "rcpt_1001",
+  "notes": { "product": "Oversized Heavyweight Hoodie" }
+}
+```
+
+---
+
+### 7. Verify Razorpay Payment Signature
+**Endpoint**: `POST /api/razorpay/verify`  
+**Description**: Validates HMAC-SHA256 signature using `crypto.createHmac('sha256', secret)` over `order_id|payment_id`.
+
+#### Request Body
+```json
+{
+  "orderId": "order_abc123",
+  "paymentId": "pay_xyz789",
+  "signature": "hmac_sha256_hash_here"
+}
+```
+
+---
+
+## FastAPI Microservice Endpoints (`http://localhost:8000`)
 
 ### 1. Health Check
 **Endpoint**: `GET /health`  
-**Response**:
 ```json
 {
   "status": "healthy",
@@ -113,26 +191,6 @@
 }
 ```
 
-### 2. Score Merchant
+### 2. Score Merchant Telemetry
 **Endpoint**: `POST /score-merchant`  
-**Headers**: `Content-Type: application/json`
-
-#### Sample Curl Command
-```bash
-curl -X POST "http://localhost:8000/score-merchant" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "business_type": "d2c_ecommerce",
-    "merchant_id": "merch_12345",
-    "transactions": [
-      {
-        "id": "pay_test_01",
-        "amount": 1250,
-        "currency": "INR",
-        "status": "captured",
-        "method": "upi",
-        "created_at": 1757000000
-      }
-    ]
-  }'
-```
+**Description**: High-throughput FastAPI endpoint executing XGBoost anomaly inference and Z-score calculations.
